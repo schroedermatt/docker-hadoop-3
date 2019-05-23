@@ -2,7 +2,6 @@ FROM ubuntu:18.04
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV HADOOP_HOME /opt/hadoop
-ENV HUE_HOME /opt/hue
 
 RUN apt-get update
 RUN apt-get install -y --reinstall build-essential
@@ -49,15 +48,22 @@ RUN \
 ####################################################################################
 # HUE
 
+# ENV HUE_HOME /opt/hue
+
 ## Download and setup /opt/hue dir
-RUN \
-   wget https://github.com/cloudera/hue/archive/release-4.4.0.tar.gz && \
-    mkdir -p $HUE_HOME && \
-    tar -xzf release-4.4.0.tar.gz -C $HUE_HOME
-WORKDIR $HUE_HOME
-# RUN make apps
-RUN chown -R hue:hue $HUE_HOME
-WORKDIR /
+# RUN \
+#    wget https://github.com/cloudera/hue/archive/release-4.4.0.tar.gz && \
+#     mkdir -p $HUE_HOME && \
+#     tar -xzf release-4.4.0.tar.gz -C $HUE_HOME
+
+# RUN cd $HUE_HOME/release-4.4.0/apps && make
+
+# WORKDIR $HUE_HOME
+# RUN chown -R hue:hue $HUE_HOME
+
+# WORKDIR /
+
+# ADD hue.ini ${HUE_HOME}/desktop/conf
 
 ####################################################################################
 
@@ -69,8 +75,6 @@ RUN \
 ADD *xml $HADOOP_HOME/etc/hadoop/
 
 ADD ssh_config /root/.ssh/config
-
-ADD hue.ini ${HUE_HOME}/desktop/conf
 
 ADD start-all.sh start-all.sh
 
