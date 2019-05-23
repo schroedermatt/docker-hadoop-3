@@ -16,54 +16,41 @@ For some details about Hadoop 3 (such as new ports), see: https://fr.slideshare.
 
 > Warning: hue is not fully functional... Its integration is a work in progess (file browsing is ok) !
 
-
 ## How-to
 
 * Build the image
-```sh
-sudo docker build -t hadoop3 .
-```
 
+  ```sh
+  sudo docker build -t hadoop3 .
+  ```
 
 * Run the container
-```sh
-sudo docker run --hostname=hadoop3 -p 8088:8088 -p 9870:9870 -p 9864:9864 -p 19888:19888 \
-  -p 8042:8042 -p 8888:8888 --name hadoop3 -d hadoop3
-```
+
+  ```sh
+  sudo docker run --hostname=hadoop3 -p 8088:8088 -p 9870:9870 -p 9864:9864 -p 19888:19888 \
+    -p 8042:8042 -p 8888:8888 --name hadoop3 -d hadoop3
+  ```
 
 * Access the container
-```sh
-sudo docker exec -it hadoop3 bash
-```
+
+  ```sh
+  sudo docker exec -it hadoop3 bash
+  ```
 
 * Test a job
-```sh
-yarn jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0.jar pi 10 100
-```
+
+  ```sh
+  yarn jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.2.jar pi 10 100
+  ```
 
 * Clean
-```sh
-sudo docker stop hadoop3 
-sudo docker rm hadoop3 
-```
+  
+  ```sh
+  sudo docker stop hadoop3
+  sudo docker rm hadoop3
+  ``
 
-## Next steps
+## Links
 
-| Product/Framework/Env. | Version | (R)equired/((O)ptional |
-| --- | --- | --- |
-| Hue | 4.1 | R |
-| Hive | 2.3.2 | R |
-| Minifi | ? | O |
-| Druid | ? | O |
-| Kafka | ? | O |
-| Storm | ? | O |
-| Spark | 2.2.0 | O |
-| Ambari | 2.6.1 | O |
-| Ambari-metrics | 2.6.1 | O |
-| HBase | ? | O |
-
-
-## Some notes
-
-* Hue: https://www.dropbox.com/s/auwpqygqgdvu1wj/hue-4.1.0.tgz
+* Hue: https://github.com/cloudera/hue/releases (4.4.0.tar.gz in the folder already)
 * Hive: http://apache.crihan.fr/dist/hive/hive-2.3.2/apache-hive-2.3.2-bin.tar.gz

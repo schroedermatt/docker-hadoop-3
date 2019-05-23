@@ -1,7 +1,8 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
-ENV HADOOP_HOME /opt/hadoop
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV HADOOP_HOME /opt/hadoop
+ENV HUE_HOME /opt/hue
 
 RUN apt-get update
 RUN apt-get install -y --reinstall build-essential
@@ -26,14 +27,10 @@ RUN apt-get install -y libmysqlclient-dev
 RUN \
     if [ ! -e /usr/bin/python ]; then ln -s /usr/bin/python2.7 /usr/bin/python; fi
 
-# If you have already downloaded the tgz, add this line OR comment it AND ...
-ADD hadoop-3.1.0.tar.gz /
-
-# ... uncomment the 2 first lines
 RUN \
-#    wget http://apache.crihan.fr/dist/hadoop/common/hadoop-3.1.0/hadoop-3.1.0.tar.gz && \
-#    tar -xzf hadoop-3.1.0.tar.gz && \
-    mv hadoop-3.1.0 $HADOOP_HOME && \
+   wget http://apache.crihan.fr/dist/hadoop/common/hadoop-3.1.2/hadoop-3.1.2.tar.gz && \
+    tar -xzf hadoop-3.1.2.tar.gz && \
+    mv hadoop-3.1.2 $HADOOP_HOME && \
     for user in hadoop hdfs yarn mapred hue; do \
          useradd -U -M -d /opt/hadoop/ --shell /bin/bash ${user}; \
     done && \
@@ -52,19 +49,15 @@ RUN \
 ####################################################################################
 # HUE
 
-# https://www.dropbox.com/s/auwpqygqgdvu1wj/hue-4.1.0.tgz
-ADD hue-4.1.0.tgz /
-
-
-##
-RUN mv -f /hue-4.1.0 /opt/hue
-WORKDIR /opt/hue
-RUN make apps
-
-RUN chown -R hue:hue /opt/hue
-
+## Download and setup /opt/hue dir
+RUN \
+   wget https://github.com/cloudera/hue/archive/release-4.4.0.tar.gz && \
+    mkdir -p $HUE_HOME && \
+    tar -xzf release-4.4.0.tar.gz -C $HUE_HOME
+WORKDIR $HUE_HOME
+# RUN make apps
+RUN chown -R hue:hue $HUE_HOME
 WORKDIR /
-
 
 ####################################################################################
 
@@ -77,7 +70,7 @@ ADD *xml $HADOOP_HOME/etc/hadoop/
 
 ADD ssh_config /root/.ssh/config
 
-ADD hue.ini /opt/hue/desktop/conf
+ADD hue.ini ${HUE_HOME}/desktop/conf
 
 ADD start-all.sh start-all.sh
 
