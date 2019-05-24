@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  hadoop3:
+    container_name: hadoop3
+    hostname: hadoop3
+    image: hadoop3:latest
+    ports:
+      - '8042:8042'
+      - '8088:8088'
+      - '9000:9000'
+      - '9864:9864'
+      - '9866:9866'
+      - '9867:9867'
+      - '9870:9870'

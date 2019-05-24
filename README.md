@@ -1,8 +1,6 @@
-# Docker file for Hadoop 3
+# Hadoop 3.x Docker Image
 
 Most of the work is coming from : http://bigdatums.net/2017/11/04/creating-hadoop-docker-image/
-
-Just added a few adaptations for Hadoop 3.
 
 For some details about Hadoop 3 (such as new ports), see: https://fr.slideshare.net/HadoopSummit/hadoop-3-in-a-nutshell
 
@@ -12,11 +10,8 @@ For some details about Hadoop 3 (such as new ports), see: https://fr.slideshare.
 > After starting the container, you can access the web UI:
 > * HDFS: http://localhost:9870
 > * RM: http://localhost:8088
-> * HUE: http://localhost:8888 (create a user `hue`)
 
-> Warning: hue is not fully functional... Its integration is a work in progess (file browsing is ok) !
-
-## How-to
+## Getting Started
 
 * Build the image
 
@@ -27,14 +22,26 @@ For some details about Hadoop 3 (such as new ports), see: https://fr.slideshare.
 * Run the container
 
   ```sh
-  sudo docker run --hostname=hadoop3 -p 8088:8088 -p 9870:9870 -p 9864:9864 -p 19888:19888 \
-    -p 8042:8042 -p 8888:8888 --name hadoop3 -d hadoop3
+  docker run -d \
+    --name hadoop3 --hostname=hadoop3 \
+    -p 8042:8042 \
+    -p 8088:8088 \
+    -p 9000:9000 \
+    -p 9864:9864 \
+    -p 9866:9866 \
+    -p 9867:9867 \
+    -p 9870:9870 \
+    -p 19888:19888 \
+    hadoop3:latest
   ```
 
 * Access the container
 
   ```sh
-  sudo docker exec -it hadoop3 bash
+  docker exec -it hadoop3 bash
+
+  # get status of dfs
+  hdfs dfsadmin -report
   ```
 
 * Test a job
@@ -46,11 +53,5 @@ For some details about Hadoop 3 (such as new ports), see: https://fr.slideshare.
 * Clean
   
   ```sh
-  sudo docker stop hadoop3
-  sudo docker rm hadoop3
+  docker stop hadoop3 && docker rm hadoop3
   ``
-
-## Links
-
-* Hue: https://github.com/cloudera/hue/releases (4.4.0.tar.gz in the folder already)
-* Hive: http://apache.crihan.fr/dist/hive/hive-2.3.2/apache-hive-2.3.2-bin.tar.gz
